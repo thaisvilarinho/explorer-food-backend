@@ -18,7 +18,7 @@ class IngredientsRepository {
     .select('name')
     .from('ingredients')
     .where({ dish_id });
-    console.log(ingredients);
+    
     return ingredients;
 
   }

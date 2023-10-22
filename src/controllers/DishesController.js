@@ -11,7 +11,6 @@ class DishesController {
     const ingredientsRepository = new IngredientsRepository();
     const dishesService = new DishesService(dishesRepository, ingredientsRepository);
 
-
     await dishesService.create({ name, description, category, price, ingredients, image });
 
     response.status(201).json();
@@ -55,6 +54,18 @@ class DishesController {
 
     response.status(200).json(dish)
   }
+
+  async delete(request, response) {
+    const { id } = request.params
+
+    const dishesRepository = new DishesRepository();
+    const ingredientsRepository = new IngredientsRepository();
+    const dishesService = new DishesService(dishesRepository, ingredientsRepository);
+
+    await dishesService.delete(id)
+
+    response.status(204).json()
+}
 
 
 }

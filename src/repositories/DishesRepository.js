@@ -56,15 +56,15 @@ class DishesRepository {
       )
       .from('dishes')
       .innerJoin('ingredients', 'dishes.id', 'ingredients.dish_id');
-  
+
     if (searchTerm) {
       query
         .whereLike('dishes.name', `%${searchTerm}%`)
         .orWhereLike('ingredients.name', `%${searchTerm}%`);
     }
-  
+
     const results = await query;
-  
+
     const groupedResults = results.reduce((acc, result) => {
       const existingDish = acc.find((dish) => dish.id === result.id);
       if (existingDish) {
@@ -82,7 +82,7 @@ class DishesRepository {
       }
       return acc;
     }, []);
-  
+
     return groupedResults;
   }
 
@@ -99,8 +99,16 @@ class DishesRepository {
       .from('dishes')
       .where('dishes.id', id)
       .first();
-  
+
     return dish;
+  }
+
+  async delete(id) {
+    const deleted = knex('dishes')
+      .where({ id })
+      .delete()
+
+    return deleted
   }
 
 }

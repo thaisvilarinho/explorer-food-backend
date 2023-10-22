@@ -12,7 +12,7 @@ class DishesService {
     const dishes = await this.dishesRepository.findByName(name);
 
     if (dishes) {
-      throw new AppError('Produto já cadastrado no sistema', 409);
+      throw new AppError('Prato já cadastrado no sistema', 409);
     }
 
     const diskStorage = new DiskStorage();
@@ -52,13 +52,13 @@ class DishesService {
     const dishWasUpdated = await this.dishesRepository.update({ id, name, description, category, price, image });
 
     if (!dishWasUpdated) {
-      throw new AppError('Falha na atualização do produto', 409);
+      throw new AppError('Falha na atualização do Prato', 409);
     }
 
     const ingridentsDeleted = await this.ingredientsService.delete({ dish_id: dish.id });
 
     if (!ingridentsDeleted) {
-      throw new AppError('Falha na atualização do produto', 409);
+      throw new AppError('Falha na atualização do Prato', 409);
     }
 
     const ingredientsInsert = ingredients.map(name => {
@@ -82,20 +82,34 @@ class DishesService {
   async show(id) {
     const dish = await this.dishesRepository.show(id);
 
-    if(!dish){
-      throw new AppError('Produto não encontrado', 404);
+    if (!dish) {
+      throw new AppError('Prato não encontrado', 404);
     }
-      
+
     const ingredients = await this.ingredientsService.show({ dish_id: dish.id });
 
-    if(!ingredients){
-      throw new AppError('Produto não encontrado', 404);
+    if (!ingredients) {
+      throw new AppError('Prato não encontrado', 404);
     }
     dish.ingredients = ingredients;
     return dish
   }
 
+  async delete(id) {
+    const dish = await this.dishesRepository.findById(id);
 
+    if (!dish) {
+      throw new AppError('Prato não encontrado', 404);
+    }
+
+    await this.dishesRepository.delete(id);
+
+    const checkRemoval = await this.dishesRepository.findById(id);
+
+    if(checkRemoval){
+      throw new AppError('Falha na remoção do prato', 422);
+    }
+  }
 
 }
 
