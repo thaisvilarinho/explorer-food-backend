@@ -7,10 +7,20 @@ class IngredientsRepository {
     return ingredientsInserted;
   }
 
-  async delete({ dish_id }) {
+  async delete(dish_id) {
     await knex('ingredients')
       .where({ dish_id })
       .del();
+  }
+
+  async show (dish_id) {
+    const ingredients = await knex
+    .select('name')
+    .from('ingredients')
+    .where({ dish_id });
+    console.log(ingredients);
+    return ingredients;
+
   }
 
 }

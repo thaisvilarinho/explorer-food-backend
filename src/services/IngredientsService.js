@@ -9,12 +9,20 @@ class IngredientsService {
   }
 
   async delete({ dish_id }) {
-    await this.ingredientsRepository.delete({ dish_id });
+    await this.ingredientsRepository.delete(dish_id);
 
     const ingredientsAfterDelete = await this.ingredientsRepository.show({ dish_id });
     const allDeleted = ingredientsAfterDelete.length === 0;
 
     return allDeleted;
+  }
+
+  async show({ dish_id }) {
+    const ingredients = await this.ingredientsRepository.show(dish_id);
+    const ingredientsName = ingredients.map((ingredient) => ingredient.name);
+
+    return ingredientsName;
+
   }
 
 }

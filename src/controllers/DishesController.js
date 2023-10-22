@@ -40,8 +40,20 @@ class DishesController {
 
     const dishes = await dishesService.index(search);
 
-    response.status(200).json({ dishes });
+    response.status(200).json(dishes);
 
+  }
+
+  async show(request, response) {
+    const { id } = request.params;
+
+    const dishesRepository = new DishesRepository();
+    const ingredientsRepository = new IngredientsRepository();
+    const dishesService = new DishesService(dishesRepository, ingredientsRepository);
+
+    const dish = await dishesService.show(id);
+
+    response.status(200).json(dish)
   }
 
 

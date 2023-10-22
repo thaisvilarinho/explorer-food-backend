@@ -51,13 +51,13 @@ class DishesService {
 
     const dishWasUpdated = await this.dishesRepository.update({ id, name, description, category, price, image });
 
-    if(!dishWasUpdated){
+    if (!dishWasUpdated) {
       throw new AppError('Falha na atualização do produto', 409);
     }
 
     const ingridentsDeleted = await this.ingredientsService.delete({ dish_id: dish.id });
 
-    if(!ingridentsDeleted){
+    if (!ingridentsDeleted) {
       throw new AppError('Falha na atualização do produto', 409);
     }
 
@@ -78,7 +78,24 @@ class DishesService {
     const results = await this.dishesRepository.index(searchTerm);
     return results;
   }
-  
+
+  async show(id) {
+    const dish = await this.dishesRepository.show(id);
+
+    if(!dish){
+      throw new AppError('Produto não encontrado', 404);
+    }
+      
+    const ingredients = await this.ingredientsService.show({ dish_id: dish.id });
+
+    if(!ingredients){
+      throw new AppError('Produto não encontrado', 404);
+    }
+    dish.ingredients = ingredients;
+    return dish
+  }
+
+
 
 }
 

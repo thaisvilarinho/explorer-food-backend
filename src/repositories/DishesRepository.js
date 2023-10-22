@@ -85,6 +85,24 @@ class DishesRepository {
   
     return groupedResults;
   }
+
+  async show(id) {
+    const dish = await knex
+      .select(
+        'dishes.id',
+        'dishes.name',
+        'dishes.description',
+        'dishes.category',
+        'dishes.price',
+        'dishes.image'
+      )
+      .from('dishes')
+      .where('dishes.id', id)
+      .first();
+  
+    return dish;
+  }
+
 }
 
 module.exports = DishesRepository;
