@@ -17,10 +17,6 @@ class IngredientsService {
     return allDeleted;
   }
 
-  async show({ dish_id }) {
-    const ingredients = await this.ingredientsRepository.show({ dish_id });
-    return ingredients;
-  }
 }
 
 module.exports = IngredientsService;

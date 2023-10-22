@@ -8,7 +8,7 @@ class DishesRepository {
 
     return dishes;
   }
-  
+
   async findById(id) {
     const dish = await knex('dishes')
       .where({ id })
@@ -43,6 +43,48 @@ class DishesRepository {
     return totalDishesUpdated === 1;
   }
 
+  async index(searchTerm) {
+    let query = knex
+      .select(
+        'dishes.id',
+        'dishes.name as dish_name',
+        'dishes.description',
+        'dishes.category',
+        'dishes.price',
+        'dishes.image',
+        'ingredients.name as ingredient_name'
+      )
+      .from('dishes')
+      .innerJoin('ingredients', 'dishes.id', 'ingredients.dish_id');
+  
+    if (searchTerm) {
+      query
+        .whereLike('dishes.name', `%${searchTerm}%`)
+        .orWhereLike('ingredients.name', `%${searchTerm}%`);
+    }
+  
+    const results = await query;
+  
+    const groupedResults = results.reduce((acc, result) => {
+      const existingDish = acc.find((dish) => dish.id === result.id);
+      if (existingDish) {
+        existingDish.ingredients.push(result.ingredient_name);
+      } else {
+        acc.push({
+          id: result.id,
+          dish_name: result.dish_name,
+          description: result.description,
+          category: result.category,
+          price: result.price,
+          image: result.image,
+          ingredients: [result.ingredient_name],
+        });
+      }
+      return acc;
+    }, []);
+  
+    return groupedResults;
+  }
 }
 
 module.exports = DishesRepository;

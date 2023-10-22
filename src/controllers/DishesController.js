@@ -13,7 +13,7 @@ class DishesController {
 
 
     await dishesService.create({ name, description, category, price, ingredients, image });
-    
+
     response.status(201).json();
   }
 
@@ -29,7 +29,21 @@ class DishesController {
     const updatedDish = await dishesService.update({ id, name, description, category, price, ingredients, image });
 
     response.status(200).json({ updatedDish, ingredients })
-}
+  }
+
+  async index(request, response) {
+    const { search } = request.query;
+
+    const dishesRepository = new DishesRepository();
+    const ingredientsRepository = new IngredientsRepository();
+    const dishesService = new DishesService(dishesRepository, ingredientsRepository);
+
+    const dishes = await dishesService.index(search);
+
+    response.status(200).json({ dishes });
+
+  }
+
 
 }
 

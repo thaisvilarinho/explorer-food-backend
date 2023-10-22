@@ -13,14 +13,6 @@ class IngredientsRepository {
       .del();
   }
 
-
-  async show({ dish_id }) {
-    const ingredients = knex('ingredients')
-      .where({ dish_id })
-      .orderBy('name');
-
-    return ingredients;
-  }
 }
 
 module.exports = IngredientsRepository;

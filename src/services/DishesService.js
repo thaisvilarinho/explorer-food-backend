@@ -74,6 +74,12 @@ class DishesService {
     return dishUpdated;
   }
 
+  async index(searchTerm) {
+    const results = await this.dishesRepository.index(searchTerm);
+    return results;
+  }
+  
+
 }
 
 module.exports = DishesService;
