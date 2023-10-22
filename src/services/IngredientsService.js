@@ -3,19 +3,18 @@ class IngredientsService {
     this.ingredientsRepository = ingredientsRepository;
   }
 
-  async insert(ingredients) {
-    const ingredientsInsert = await this.ingredientsRepository.insert(ingredients);
+  async create(ingredients) {
+    const ingredientsInsert = await this.ingredientsRepository.create(ingredients);
     return ingredientsInsert;
   }
 
   async delete({ dish_id }) {
-    const ingredientsDelete = await this.ingredientsRepository.delete({ dish_id });
-    return ingredientsDelete;
-  }
+    await this.ingredientsRepository.delete({ dish_id });
 
-  async update({ dish_id, ingredientsInsert }) {
-    const ingredientsUpdated = await this.ingredientsRepository.update({ dish_id, ingredientsInsert });
-    return ingredientsUpdated;
+    const ingredientsAfterDelete = await this.ingredientsRepository.show({ dish_id });
+    const allDeleted = ingredientsAfterDelete.length === 0;
+
+    return allDeleted;
   }
 
   async show({ dish_id }) {

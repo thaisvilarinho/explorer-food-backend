@@ -13,9 +13,23 @@ class DishesController {
 
 
     await dishesService.create({ name, description, category, price, ingredients, image });
-
-    response.status(201).json()
+    
+    response.status(201).json();
   }
+
+  async update(request, response) {
+    const { name, description, category, price, ingredients } = request.body;
+    const { id } = request.params;
+    const image = request.file.filename ?? null;
+
+    const dishesRepository = new DishesRepository();
+    const ingredientsRepository = new IngredientsRepository();
+    const dishesService = new DishesService(dishesRepository, ingredientsRepository);
+
+    const updatedDish = await dishesService.update({ id, name, description, category, price, ingredients, image });
+
+    response.status(200).json({ updatedDish, ingredients })
+}
 
 }
 
