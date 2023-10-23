@@ -43,7 +43,7 @@ class DishesRepository {
     return totalDishesUpdated === 1;
   }
 
-  async index(searchTerm) {
+  async index(search) {
     let query = knex
       .select(
         'dishes.id',
@@ -57,10 +57,10 @@ class DishesRepository {
       .from('dishes')
       .innerJoin('ingredients', 'dishes.id', 'ingredients.dish_id');
 
-    if (searchTerm) {
+    if (!!search) {
       query
-        .whereLike('dishes.name', `%${searchTerm}%`)
-        .orWhereLike('ingredients.name', `%${searchTerm}%`);
+        .whereLike('dishes.name', `%${search}%`)
+        .orWhereLike('ingredients.name', `%${search}%`);
     }
 
     const results = await query;
@@ -72,7 +72,7 @@ class DishesRepository {
       } else {
         acc.push({
           id: result.id,
-          dish_name: result.dish_name,
+          name: result.dish_name,
           description: result.description,
           category: result.category,
           price: result.price,

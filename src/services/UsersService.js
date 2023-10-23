@@ -13,6 +13,10 @@ class UsersService {
       throw new AppError("Este e-mail já está em uso.", 409);
     }
 
+    if(password.length < 6){
+       throw new AppError("E-mail e/ou senha incorreta.", 401);
+    }
+
     const hashedPassword = await hash(password, 8);
     const userCreated = await this.usersRepository.create({ name, email, password: hashedPassword });
 

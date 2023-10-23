@@ -19,7 +19,7 @@ class DishesController {
   async update(request, response) {
     const { name, description, category, price, ingredients } = request.body;
     const { id } = request.params;
-    const image = request.file.filename ?? null;
+    const image = request.file ? request.file.filename : null
 
     const dishesRepository = new DishesRepository();
     const ingredientsRepository = new IngredientsRepository();
@@ -32,7 +32,6 @@ class DishesController {
 
   async index(request, response) {
     const { search } = request.query;
-
     const dishesRepository = new DishesRepository();
     const ingredientsRepository = new IngredientsRepository();
     const dishesService = new DishesService(dishesRepository, ingredientsRepository);

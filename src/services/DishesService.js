@@ -10,7 +10,7 @@ class DishesService {
 
   async create({ name, description, category, price, ingredients, image }) {
     const dishes = await this.dishesRepository.findByName(name);
-
+    
     if (dishes) {
       throw new AppError('Prato já cadastrado no sistema', 409);
     }
@@ -20,13 +20,20 @@ class DishesService {
     const imageFile = await diskStorage.saveFile(image);
 
     const dish_id = await this.dishesRepository.create({ name, description, category, price, image: imageFile });
+    
+    const hasOnlyOneIngredient = typeof ingredients === 'string';
 
-    const ingredientsInsert = ingredients.map(name => {
+    const ingredientsInsert = hasOnlyOneIngredient ? {
+      name: ingredients,
+      dish_id
+  
+    } :
+    ingredients.map(name => {
       return {
         dish_id,
         name
       }
-    })
+    });
 
     await this.ingredientsService.create(ingredientsInsert);
 
@@ -36,18 +43,20 @@ class DishesService {
   async update({ id, name, description, category, price, ingredients, image }) {
     const dish = await this.dishesRepository.findById(id);
 
-    if (dish.image && image) {
+    if (image && image !== dish.image) {
       const diskStorage = new DiskStorage();
 
       await diskStorage.deleteFile(dish.image);
       image = await diskStorage.saveFile(image);
+    }else {
+      image = dish.image;
     }
 
     name = name ?? dish.name;
     description = description ?? dish.description;
     category = category ?? dish.category;
     price = price ?? dish.price;
-    image = image ?? dish.image;
+  
 
     const dishWasUpdated = await this.dishesRepository.update({ id, name, description, category, price, image });
 
@@ -61,12 +70,20 @@ class DishesService {
       throw new AppError('Falha na atualização do Prato', 409);
     }
 
-    const ingredientsInsert = ingredients.map(name => {
+    const hasOnlyOneIngredient = typeof ingredients === 'string';
+
+    const ingredientsInsert = hasOnlyOneIngredient ? {
+      name: ingredients,
+      dish_id: dish.id
+  
+    } :
+    ingredients.map(name => {
       return {
-        dish_id: dish.id,
+        dish_i: dish.id,
         name
       }
     });
+
     await this.ingredientsService.create(ingredientsInsert);
 
     const dishUpdated = await this.dishesRepository.findById(id);
