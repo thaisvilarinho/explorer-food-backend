@@ -79,7 +79,7 @@ class DishesService {
     } :
     ingredients.map(name => {
       return {
-        dish_i: dish.id,
+        dish_id: dish.id,
         name
       }
     });
