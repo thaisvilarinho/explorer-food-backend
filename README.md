@@ -18,6 +18,7 @@ Food Explorer is an extraordinary web application that provides a truly unique e
 Você pode experimentar a aplicação no ar através do seguinte link:
 
 [**Acessar frontend do Food Explorer**](https://explorer-food-frontend-app.netlify.app/)
+</br>
 [**Acessar backend do Food Explorer**](https://explorer-food-backend-api.onrender.com/)
 
 ## Index
