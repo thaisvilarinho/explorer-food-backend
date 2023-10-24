@@ -14,7 +14,7 @@ app.use(express.json());
 app.use('/files', express.static(uploadConfig.UPLOADS_FOLDER));
 app.use(cookieParser());
 app.use(cors({
-  origin: [process.env.PORT, 'http://127.0.0.1:5173'],
+  origin: [process.env.BASE_URL, 'http://127.0.0.1:5173'],
   credentials: true
 }));
 
