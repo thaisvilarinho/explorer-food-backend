@@ -63,7 +63,6 @@ Crie um arquivo `.env` como mostra no arquivo `.env.example` na raiz do projeto 
 ```dotenv
 AUTH_SECRET=
 PORT=
-BASE_URL=
 ``` 
 
 #### Efetue a criação do banco de dados e rode o servidor com: 
